@@ -1,4 +1,7 @@
-import type { MetaFunction } from "@remix-run/node";
+import { json, type MetaFunction } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
+import { fetchTVSeasonWatchProviders } from "tmdb-client";
+import logo from "../images/logo.png";
 
 export const meta: MetaFunction = () => {
   return [
@@ -7,18 +10,27 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+export const loader = async () => {
+  const { results } = await fetchTVSeasonWatchProviders(60572, 1);
+  return json(results);
+};
+
 export default function Index() {
+  const data = useLoaderData<typeof loader>();
   return (
-    <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
-      <h1>Welcome to Remix</h1>
+    <div>
+      <nav>
+        <img src={logo} alt="Just Watch Pokemon logo" />
+      </nav>
       <ul>
         <li>
+          {JSON.stringify(data)}
           <a
             target="_blank"
             href="https://remix.run/tutorials/blog"
             rel="noreferrer"
           >
-            15m Quickstart Blog Tutorial
+            15m Quickstart Blog Tutor
           </a>
         </li>
         <li>
